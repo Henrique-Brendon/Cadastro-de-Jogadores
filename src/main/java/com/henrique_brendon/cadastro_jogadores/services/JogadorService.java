@@ -26,4 +26,8 @@ public class JogadorService {
         var novoJogador = new Jogador(jogador.nome(), jogador.email(), jogador.telefone(), novoCodinome, jogador.grupoCodinome());
         return jogadorRepository.salvar(novoJogador);
     }
+
+    private List<String> listarCodinomesEmUso(GrupoCodinome grupoCodinome) {
+        return jogadorRepository.listarCodinomesPorGrupo(grupoCodinome);
+    }
 }

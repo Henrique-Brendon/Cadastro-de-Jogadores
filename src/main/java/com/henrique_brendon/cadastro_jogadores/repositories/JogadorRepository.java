@@ -1,9 +1,12 @@
 package com.henrique_brendon.cadastro_jogadores.repositories;
 
+import java.util.List;
+
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
 import com.henrique_brendon.cadastro_jogadores.entities.Jogador;
+import com.henrique_brendon.cadastro_jogadores.entities.enums.GrupoCodinome;
 
 @Repository
 public class JogadorRepository {
@@ -26,5 +29,14 @@ public class JogadorRepository {
             .param("grupoCodinome", jogador.grupoCodinome())
             .update();
         return jogador;
+    }
+
+    public List<String> listarCodinomesPorGrupo(GrupoCodinome grupoCodinome) {
+        return jdbcClient.sql("""
+                SELECT distinc(codinomes) FROM JOGADORES WHERE grupo_codinome = :grupoCodinome
+            """)
+            .param("grupoCodinome", grupoCodinome.name())
+            .query(String.class)
+            .list();
     }
 }
