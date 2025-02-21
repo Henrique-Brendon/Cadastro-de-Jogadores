@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.henrique_brendon.cadastro_jogadores.entities.Jogador;
 import com.henrique_brendon.cadastro_jogadores.entities.enums.GrupoCodinome;
+import com.henrique_brendon.cadastro_jogadores.exceptions.GrupoCodinomeIndisponivelException;
 import com.henrique_brendon.cadastro_jogadores.services.JogadorService;
 
 import jakarta.validation.Valid;
@@ -33,9 +34,14 @@ public class CadastroJogadorController {
     public String cadastroJogador(@ModelAttribute @Valid Jogador jogador, BindingResult result, Model model) throws Exception {
         if(result.hasErrors()) 
             return getViewAndModel(model, jogador);
-        
-        jogadorService.registrarJogador(jogador);
-        return "redirect:/cadastro-jogador";
+        try {
+            jogadorService.registrarJogador(jogador);
+            return "redirect:/cadastro-jogador";
+        } catch (GrupoCodinomeIndisponivelException e) {
+            result.rejectValue("grupoCodinome", "grupoCodinomeIndisponivel", e.getMessage());
+            return getViewAndModel(model, jogador);
+        }
+
     }
 
     private String getViewAndModel(Model model, Jogador jogador) {
