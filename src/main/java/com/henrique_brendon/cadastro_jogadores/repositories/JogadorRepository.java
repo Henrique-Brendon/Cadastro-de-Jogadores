@@ -20,20 +20,20 @@ public class JogadorRepository {
     public Jogador salvar(Jogador jogador) {
         jdbcClient.sql("""
             INSERT INTO JOGADORES (nome, email, telefone, codinome, grupo_codinome)
-            VALUES (:nome, :email, :telefone, :codinome        
+            VALUES (:nome, :email, :telefone, :codinome, :grupoCodinome)     
             """)
             .param("nome", jogador.nome())
             .param("email", jogador.email())
             .param("telefone", jogador.telefone())
             .param("codinome", jogador.codinome())
-            .param("grupoCodinome", jogador.grupoCodinome())
+            .param("grupoCodinome", jogador.grupoCodinome().name())
             .update();
         return jogador;
     }
 
     public List<String> listarCodinomesPorGrupo(GrupoCodinome grupoCodinome) {
         return jdbcClient.sql("""
-                SELECT distinc(codinomes) FROM JOGADORES WHERE grupo_codinome = :grupoCodinome
+                SELECT DISTINCT codinome FROM JOGADORES WHERE grupo_codinome = :grupoCodinome
             """)
             .param("grupoCodinome", grupoCodinome.name())
             .query(String.class)

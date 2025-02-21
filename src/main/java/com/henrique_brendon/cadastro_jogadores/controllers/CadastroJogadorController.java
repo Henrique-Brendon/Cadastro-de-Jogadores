@@ -24,6 +24,7 @@ public class CadastroJogadorController {
 
     @GetMapping
     public String paginaCadastroJogador(Model model) {
+        model.addAttribute("jogador", new Jogador(null, null, null, null, null));
         model.addAttribute("gruposCodinomes", GrupoCodinome.values());
         return "cadastro_jogador";
     }
@@ -34,8 +35,7 @@ public class CadastroJogadorController {
             jogadorService.registrarJogador(jogador);
             return "redirect:/cadastro-jogador";
         } catch(Exception e) {
-            return "redirect:/cadastro-jogador?erro=";
+            return "redirect:/cadastro-jogador";
         }
-
     }
 }
