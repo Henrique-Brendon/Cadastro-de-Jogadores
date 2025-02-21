@@ -69,4 +69,20 @@ public class CadastroJogadoresIT {
             .andExpect(view().name("cadastro_jogador"))
             .andExpect(model().attributeHasErrors("jogador"));
     }
+
+    @Test
+    void cadastrarJogadorSemGrupoCodinome() throws Exception {
+        mockMvc
+            .perform(post("/cadastro-jogador")
+            .param("nome", "Jogador teste")
+            .param("email", "jogador@teste.com")
+            .param("telefone", "999999999"))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(view().name("cadastro_jogador"))
+            .andExpect(model().attributeHasErrors("jogador"))
+            .andExpect(model().attributeHasFieldErrors("jogador", "grupoCodinome"));
+    }
+
+    
 }
