@@ -1,8 +1,9 @@
 package com.henrique_brendon.cadastro_jogadores.repositories;
 
-import java.util.List;
+import com.henrique_brendon.cadastro_jogadores.dtos.CodinomeDTO;
 
 public interface CodinomeRepository {
     
-    List<String> buscarCodinomes() throws Exception;
+    CodinomeDTO buscarCodinomes() throws Exception;
+
 }
