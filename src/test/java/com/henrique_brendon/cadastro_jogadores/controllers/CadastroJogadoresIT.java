@@ -56,4 +56,17 @@ public class CadastroJogadoresIT {
               hasToString(containsString(jogador.telefone())),
               hasToString(containsString(jogador.grupoCodinome().name()))))));
     }
+
+    @Test
+    void cadastrarJogadorComDadosInvalidos() throws Exception {
+        mockMvc
+            .perform(post("/cadastro-jogador")
+            .param("nome", "")
+            .param("email", "")
+            .param("telefone", ""))
+            .andDo(print())
+            .andExpect(status().isOk()) // Permanecer na página de cadastro
+            .andExpect(view().name("cadastro_jogador"))
+            .andExpect(model().attributeHasErrors("jogador"));
+    }
 }
