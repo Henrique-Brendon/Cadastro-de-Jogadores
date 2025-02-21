@@ -93,5 +93,34 @@ public class CadastroJogadoresIT {
             .andExpect(view().name("listagem_jogadores"))
             .andExpect(model().attribute("jogadores", hasSize(0)));
     }
+
+    @Test
+    void cadastrarMultiplosJogadoresEListar() throws Exception {
+        var jogador1 = new Jogador("Jogador 1", "jogador1@test.com", "111111111", null, GrupoCodinome.VINGADORES);
+        var jogador2 = new Jogador("Jogador 2", "jogador2@test.com", "222222222", null, GrupoCodinome.LIGA_DA_JUSTICA);
+
+        mockMvc
+            .perform(post("/cadastro-jogador")
+            .param("nome", jogador1.nome())
+            .param("email", jogador1.email())
+            .param("telefone", jogador1.telefone())
+            .param("grupoCodinome", jogador1.grupoCodinome().name()))
+            .andExpect(status().is3xxRedirection());
+
+        mockMvc
+            .perform(post("/cadastro-jogador")
+            .param("nome", jogador2.nome())
+            .param("email", jogador2.email())
+            .param("telefone", jogador2.telefone())
+            .param("grupoCodinome", jogador2.grupoCodinome().name()))
+            .andExpect(status().is3xxRedirection());
+
+        mockMvc
+            .perform(get("/listagem-jogadores"))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(view().name("listagem_jogadores"))
+            .andExpect(model().attribute("jogadores", hasSize(2)));
+    }
     
 }
