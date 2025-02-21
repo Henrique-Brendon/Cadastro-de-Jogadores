@@ -84,5 +84,14 @@ public class CadastroJogadoresIT {
             .andExpect(model().attributeHasFieldErrors("jogador", "grupoCodinome"));
     }
 
+    @Test
+    void listarJogadoresSemRegistro() throws Exception {
+        mockMvc
+            .perform(get("/listagem-jogadores"))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(view().name("listagem_jogadores"))
+            .andExpect(model().attribute("jogadores", hasSize(0)));
+    }
     
 }
