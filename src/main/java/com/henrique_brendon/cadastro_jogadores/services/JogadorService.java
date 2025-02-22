@@ -2,6 +2,8 @@ package com.henrique_brendon.cadastro_jogadores.services;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.henrique_brendon.cadastro_jogadores.entities.Jogador;
@@ -19,6 +21,7 @@ public class JogadorService {
         this.codinomeService = codinomeService;
     }
 
+    @CacheEvict(value = "jogadores", allEntries = true)
     public Jogador registrarJogador(Jogador jogador) throws Exception {
         var codinomesEmUso = listarCodinomesEmUso(jogador.grupoCodinome());
         var novoCodinome = codinomeService.gerarCodinome(jogador.grupoCodinome(), codinomesEmUso);
@@ -27,10 +30,12 @@ public class JogadorService {
         return jogadorRepository.salvar(novoJogador);
     }
 
+    @Cacheable(value = "jogadores")
     public List<Jogador> listarJogadores() {
         return jogadorRepository.listarJogadores();
     }
 
+    
     private List<String> listarCodinomesEmUso(GrupoCodinome grupoCodinome) {
         return jogadorRepository.listarCodinomesPorGrupo(grupoCodinome);
     }
